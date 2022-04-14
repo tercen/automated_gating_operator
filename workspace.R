@@ -1,8 +1,8 @@
 library(tercen)
 library(dplyr, warn.conflicts = FALSE)
 
-options("tercen.workflowId" = "wwww")
-options("tercen.stepId"     = "dddd")
+options("tercen.workflowId" = "1c421ac85832bc0e153d047644b2304c")
+options("tercen.stepId"     = "a24610ab-08ff-45b8-bb0c-d7b59207d04e")
 
 getOption("tercen.workflowId")
 getOption("tercen.stepId")

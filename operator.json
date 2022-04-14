@@ -1,10 +1,57 @@
 {
-  "name": "Template_R_operator",
-  "description": "Calculate the mathematical average of the data points in a cell.",
-  "tags": ["basic statistics"],
-  "authors": ["tercen"],
-  "urls": ["https://github.com/tercen/template_R_operator"],
-  "properties": []
+"name": "OpenCyto one-step",
+"description": "Apply one of the OpenCyto gating methods to your data.",
+"tags": ["flow cytometry", "gating"],
+"authors": ["tercen"],
+"container": "tercen/opencyto_onestep_operator:0.0.2",
+"urls": ["https://github.com/tercen/opencyto_onestep_operator"],
+"properties": [ 
+  {
+    "kind": "StringProperty",
+    "name": "pop",
+    "defaultValue": "+",
+    "description": "population patterns of '+/-‘ or ’+/-+/-', which tells the algorithm which side (postive or negative) of 1d gate or which quadrant of 2d gate to be kept."
+  },
+  {
+    "kind": "EnumeratedProperty",
+    "name": "gating_method",
+    "defaultValue": "gate_mindensity",
+    "values": [
+      "singletGate",
+      "gate_mindensity",
+      "tailgate"
+    ],
+    "description": "Name of the gating function."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "gating_args",
+    "defaultValue": "",
+    "description": "Named arguments passed to gating function."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "collapseDataForGating",
+    "defaultValue": "",
+    "description": "When TRUE, data is collapsed (within groups if 'groupBy' specified) before gating and the gate is replicated across collapsed samples. When set FALSE (or blank), then 'groupBy' argument is only used by 'preprocessing' and ignored by gating."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "groupBy",
+    "defaultValue": "",
+    "description": " If given, samples are split into groups by the unique combinations of study variable. When split is numeric, then samples are grouped by every N samples."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "preprocessing_method",
+    "defaultValue": "",
+    "description": "Name of the preprocessing function."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "preprocessing_args",
+    "defaultValue": "",
+    "description": "Named arguments passed to the preprocessing function."
+  }
+  ]
 }
-
-
