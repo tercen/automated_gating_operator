@@ -12,18 +12,18 @@ dims <- paste0(ctx$rselect()[[1]], collapse = ",")
 
 # Parameters
 pop                   <- ctx$op.value('pop', as.character, '+')
-gating_method         <- ctx$op.value('gating_method', as.character, 'singletGate')
+gating_method         <- ctx$op.value('gating_method', as.character, 'gate_mindensity')
 gating_args           <- ctx$op.value('gating_args', as.character, '')
 collapseDataForGating <- ctx$op.value('collapseDataForGating', as.character, '')
 groupBy               <- ctx$op.value('groupBy', as.character, '')
 preprocessing_method  <- ctx$op.value('preprocessing_method', as.character, '')
 preprocessing_args    <- ctx$op.value('preprocessing_args', as.character, '')
 
+alias <- 'gating_step'
+
 data <- ctx %>% 
   as.matrix() %>%
   t()
-
-dim(data)
 
 colnames(data) <- ctx$rselect()[[1]]
 
@@ -36,7 +36,7 @@ gs <- GatingSet(flow.set)
 
 gs_add_gating_method(
   gs,
-  alias = 'gating_step',
+  alias = alias,
   pop = pop,
   parent = "root",
   dims = dims,
