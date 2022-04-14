@@ -3,7 +3,7 @@
 "description": "Apply one of the OpenCyto gating methods to your data.",
 "tags": ["flow cytometry", "gating"],
 "authors": ["tercen"],
-"container": "tercen/opencyto_onestep_operator:0.0.1",
+"container": "tercen/opencyto_onestep_operator:latest",
 "urls": ["https://github.com/tercen/opencyto_onestep_operator"],
 "properties": [ 
   {
