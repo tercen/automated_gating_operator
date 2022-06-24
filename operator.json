@@ -1,10 +1,10 @@
 {
-"name": "OpenCyto one-step",
-"description": "Apply one of the OpenCyto gating methods to your data.",
+"name": "OpenCyto Gating",
+"description": "Apply one of the OpenCyto automated gating methods to your data.",
 "tags": ["flow cytometry", "gating"],
 "authors": ["tercen"],
-"container": "tercen/opencyto_onestep_operator:0.0.4",
-"urls": ["https://github.com/tercen/opencyto_onestep_operator"],
+"container": "tercen/opencyto_operator:0.0.4",
+"urls": ["https://github.com/tercen/opencyto_operator"],
 "properties": [ 
   {
     "kind": "StringProperty",
