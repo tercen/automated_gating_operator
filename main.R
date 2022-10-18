@@ -9,9 +9,6 @@ suppressPackageStartupMessages({
   library(flowStats)
 })
 
-options("tercen.workflowId" = "accb3dd703974f1ce0afa21032002592")
-options("tercen.stepId" = "290ff1a1-c8b8-4521-bf87-273464716e48")
-
 ctx <- tercenCtx()
 
 rnames <- ctx$rselect()[[1]]
