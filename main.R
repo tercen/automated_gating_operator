@@ -8,7 +8,7 @@ suppressPackageStartupMessages({
   library(ggcyto)
   library(flowStats)
 })
-tim::set_workflow_step_ids("https://tercen.com/tercen/w/af62f6ddd40f1682214d21ae900c18c5/ds/e40b0c62-e8a5-4737-874c-42b39cf1d9bd")
+
 ctx <- tercenCtx()
 
 rnames <- ctx$rselect()[[1]]
