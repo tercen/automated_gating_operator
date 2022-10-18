@@ -1,14 +1,21 @@
-library(tercen)
-library(dplyr)
-library(openCyto)
-library(data.table)
-library(flowWorkspace)
-library(ncdfFlow)
-library(ggcyto)
+suppressPackageStartupMessages({
+  library(tercen)
+  library(dplyr)
+  library(openCyto)
+  library(data.table)
+  library(flowWorkspace)
+  library(ncdfFlow)
+  library(ggcyto)
+  library(flowStats)
+})
+
+options("tercen.workflowId" = "accb3dd703974f1ce0afa21032002592")
+options("tercen.stepId" = "290ff1a1-c8b8-4521-bf87-273464716e48")
 
 ctx <- tercenCtx()
 
-dims <- paste0(ctx$rselect()[[1]], collapse = ",")
+rnames <- ctx$rselect()[[1]]
+dims <- paste0(rnames, collapse = ",")
 
 # Parameters
 pop                   <- ctx$op.value('pop', as.character, '+')
@@ -25,7 +32,7 @@ data <- ctx %>%
   as.matrix() %>%
   t()
 
-colnames(data) <- ctx$rselect()[[1]]
+colnames(data) <- rnames
 
 data <- cbind(data, .ci = seq_len(nrow(data)) - 1)
 
@@ -47,8 +54,40 @@ gs_add_gating_method(
   preprocessing_args = preprocessing_args
 )
 
+## plot gating results
+if(length(rnames) == 1) {
+  p <- ggcyto(gs, aes_string(x = rnames[1]), subset = alias)
+  p <- p +
+    geom_density() +
+    geom_gate(alias) +
+    geom_stats() +
+    theme_minimal()
+} else {
+  p <- ggcyto(gs, aes_string(x = rnames[1], y = rnames[2]), subset = alias)
+  p <- p +
+    geom_hex() +
+    geom_gate(alias) +
+    geom_stats() +
+    theme_minimal()}
+
+fname <- tim::save_plot(
+  p,
+  type = "png",
+  width = 750,
+  height = 750,
+  units = "px",
+  dpi = 144,
+  device = "png"
+) 
+
+plts <- tibble(filename = fname) %>%
+  mutate(.ri = 0)
+
+df_plot <- tim::plot_file_to_df(plts$filename, filename = "Gating_step.png") %>% 
+  bind_cols(plts %>% select(.ri)) %>%
+  ctx$addNamespace() # %>%
+
 data_get <- gh_pop_get_data(gs, alias)
-?gh_pop_get_data
 filter_data <- data[, ".ci"] %in% exprs(data_get)[, ".ci"]
 
 df_out1 <- tibble(
@@ -65,8 +104,7 @@ if(class(gate_info) == "rectangleGate") {
     .ri = seq_len(ncol(data) - 1) - 1
   ) %>%
     ctx$addNamespace()
-  ctx$save(list(df_out1, df_out2))
+  ctx$save(list(df_out1, df_out2, df_plot))
 } else {
-  ctx$save(df_out1)
+  ctx$save(list(df_out1, df_plot))
 }
-

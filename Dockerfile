@@ -1,4 +1,4 @@
-FROM tercen/flowsuite:0.0.4
+FROM tercen/runtime-flowsuite:3.15-2
 
 COPY . /operator
 WORKDIR /operator

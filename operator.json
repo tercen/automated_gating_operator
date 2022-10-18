@@ -1,10 +1,10 @@
 {
-"name": "OpenCyto Gating",
+"name": "Automated gating",
 "description": "Apply one of the OpenCyto automated gating methods to your data.",
 "tags": ["flow cytometry", "gating"],
 "authors": ["tercen"],
-"container": "tercen/opencyto_operator:0.1.2",
-"urls": ["https://github.com/tercen/opencyto_operator"],
+"container": "tercen/automated_gating_operator:0.2.0",
+"urls": ["https://github.com/tercen/automated_gating_operator"],
 "properties": [ 
   {
     "kind": "StringProperty",
@@ -19,7 +19,10 @@
     "values": [
       "singletGate",
       "gate_mindensity",
-      "tailgate"
+      "tailgate",
+      "quantileGate",
+      "flowClust.2d",
+      "quadGate.tmix"
     ],
     "description": "Name of the gating function."
   },
