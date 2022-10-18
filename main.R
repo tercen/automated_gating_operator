@@ -8,7 +8,7 @@ suppressPackageStartupMessages({
   library(ggcyto)
   library(flowStats)
 })
-
+tim::set_workflow_step_ids("https://tercen.com/tercen/w/af62f6ddd40f1682214d21ae900c18c5/ds/e40b0c62-e8a5-4737-874c-42b39cf1d9bd")
 ctx <- tercenCtx()
 
 rnames <- ctx$rselect()[[1]]
@@ -18,10 +18,6 @@ dims <- paste0(rnames, collapse = ",")
 pop                   <- ctx$op.value('pop', as.character, '+')
 gating_method         <- ctx$op.value('gating_method', as.character, 'singletGate')
 gating_args           <- ctx$op.value('gating_args', as.character, '')
-collapseDataForGating <- ctx$op.value('collapseDataForGating', as.character, '')
-groupBy               <- ctx$op.value('groupBy', as.character, '')
-preprocessing_method  <- ctx$op.value('preprocessing_method', as.character, '')
-preprocessing_args    <- ctx$op.value('preprocessing_args', as.character, '')
 
 alias <- 'gating_step'
 
@@ -45,10 +41,7 @@ gs_add_gating_method(
   parent = "root",
   dims = dims,
   gating_method = gating_method,
-  gating_args = gating_args,
-  collapseDataForGating = collapseDataForGating,
-  preprocessing_method = preprocessing_method,
-  preprocessing_args = preprocessing_args
+  gating_args = gating_args
 )
 
 ## plot gating results
@@ -60,12 +53,8 @@ if(length(rnames) == 1) {
     geom_stats() +
     theme_minimal()
 } else {
-  p <- ggcyto(gs, aes_string(x = rnames[1], y = rnames[2]), subset = alias)
-  p <- p +
-    geom_hex() +
-    geom_gate(alias) +
-    geom_stats() +
-    theme_minimal()}
+  p <- autoplot(gs, gate = alias, bins = 100) + theme_minimal()
+}
 
 fname <- tim::save_plot(
   p,

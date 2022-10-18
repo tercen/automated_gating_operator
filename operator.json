@@ -3,7 +3,7 @@
 "description": "Apply one of the OpenCyto automated gating methods to your data.",
 "tags": ["flow cytometry", "gating"],
 "authors": ["tercen"],
-"container": "tercen/automated_gating_operator:0.2.1",
+"container": "tercen/automated_gating_operator:0.2.2",
 "urls": ["https://github.com/tercen/automated_gating_operator"],
 "properties": [ 
   {
@@ -31,30 +31,6 @@
     "name": "gating_args",
     "defaultValue": "",
     "description": "Named arguments passed to gating function."
-  },
-  {
-    "kind": "StringProperty",
-    "name": "collapseDataForGating",
-    "defaultValue": "",
-    "description": "When TRUE, data is collapsed (within groups if 'groupBy' specified) before gating and the gate is replicated across collapsed samples. When set FALSE (or blank), then 'groupBy' argument is only used by 'preprocessing' and ignored by gating."
-  },
-  {
-    "kind": "StringProperty",
-    "name": "groupBy",
-    "defaultValue": "",
-    "description": " If given, samples are split into groups by the unique combinations of study variable. When split is numeric, then samples are grouped by every N samples."
-  },
-  {
-    "kind": "StringProperty",
-    "name": "preprocessing_method",
-    "defaultValue": "",
-    "description": "Name of the preprocessing function."
-  },
-  {
-    "kind": "StringProperty",
-    "name": "preprocessing_args",
-    "defaultValue": "",
-    "description": "Named arguments passed to the preprocessing function."
   }
   ]
 }
