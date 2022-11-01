@@ -12,9 +12,11 @@ suppressPackageStartupMessages({
 ctx <- tercenCtx()
 
 # Parameters
-method <- ctx$op.value('gating_method', as.character, '1D - Largest peak')
+method <- ctx$op.value('gating_method', as.character, '2D - Ellipsoid gate')
 gate_name <- ctx$op.value('gate_name', as.character, 'Singlets')
 stringency <- 1 - ctx$op.value('stringency', as.numeric, 0.05)
+plot.width <- ctx$op.value('plot.width', as.numeric, 750)
+plot.height <- ctx$op.value('plot.height', as.numeric, 750)
 
 gating_method <- switch(
   method,
@@ -36,13 +38,15 @@ data <- data %>%
 files <- ctx$cselect() %>% 
   select(contains("filename"))
 
-flow.set <- data %>%
+flow.frames <- data %>%
   bind_cols(files) %>%
   group_by(across(contains("filename"))) %>% 
-  group_map(~tim::matrix_to_flowFrame(as.matrix(.x))) %>%
-  flowCore::flowSet()
+  group_map(~tim::matrix_to_flowFrame(as.matrix(.x))) 
 
-sampleNames(flow.set) <- levels(as.factor(files[[1]]))
+names(flow.frames) <- levels(as.factor(files[[1]]))
+
+flow.set <- flow.frames %>%
+  flowCore::flowSet()
 
 if(method == "1D - Largest peak") {
   global_max <- max(fsApply(flow.set, function(x) range(x, type = "data")[2, 1]))
@@ -70,24 +74,27 @@ gs_add_gating_method(
 
 ## plot gating results
 if(length(channels) == 1) {
-  p <- ggcyto(gs, aes(x = !!sym(rnames[1])))
-  p <- p +
-    geom_density() +
-    geom_gate(gate_name) +
-    geom_stats() +
-    theme_minimal() + 
-    labs_cyto("marker")
+  p <- ggcyto(gs, aes(x = !!sym(channels[1]))) +
+    geom_density()
 } else {
-  p <- autoplot(gs, gate = gate_name, bins = 100) + 
-    theme_minimal() + 
-    labs_cyto("marker")
+  p <- ggcyto(gs, aes(x = !!sym(channels[1]), y = !!sym(channels[2]))) +
+    geom_hex(bins = 100)
 }
+
+p <- p +
+  geom_hex(bins = 100) +
+  geom_gate(gate_name) +
+  geom_stats(fill = alpha(c("steelblue"), 0.2)) +
+  theme_minimal() + 
+  labs_cyto("marker") +
+  ggcyto_par_set(limits = "data") +
+  labs(title = NULL)
 
 fname <- tim::save_plot(
   p,
   type = "png",
-  width = 750,
-  height = 750,
+  width = plot.width,
+  height = plot.height,
   units = "px",
   dpi = 144,
   device = "png"

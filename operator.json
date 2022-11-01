@@ -3,15 +3,9 @@
 "description": "Apply one of the OpenCyto automated gating methods to your data.",
 "tags": ["flow cytometry", "gating"],
 "authors": ["tercen"],
-"container": "tercen/automated_gating_operator:0.3.0",
+"container": "tercen/automated_gating_operator:0.3.1",
 "urls": ["https://github.com/tercen/automated_gating_operator"],
 "properties": [ 
-  {
-    "kind": "StringProperty",
-    "name": "pop",
-    "defaultValue": "+",
-    "description": "population patterns of '+/-‘ or ’+/-+/-', which tells the algorithm which side (postive or negative) of 1d gate or which quadrant of 2d gate to be kept."
-  },
   {
     "kind": "EnumeratedProperty",
     "name": "gating_method",
@@ -36,6 +30,18 @@
     "name": "stringency",
     "defaultValue": 0.05,
     "description": "Stringency of the gate (0 = loose; 1 = stringent)."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "plot.width",
+    "defaultValue": 750,
+    "description": "Plot width (in pixels)."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "plot.height",
+    "defaultValue": 750,
+    "description": "Plot height (in pixels)."
   }
   ]
 }
