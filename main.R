@@ -82,7 +82,6 @@ if(length(channels) == 1) {
 }
 
 p <- p +
-  geom_hex(bins = 100) +
   geom_gate(gate_name) +
   geom_stats(fill = alpha(c("steelblue"), 0.2)) +
   theme_minimal() + 
