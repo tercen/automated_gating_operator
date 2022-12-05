@@ -106,7 +106,7 @@ df_plot <- tim::plot_file_to_df(plts$filename, filename = "Gating_step.png") %>%
   bind_cols(plts %>% select(.ri)) %>%
   ctx$addNamespace() # %>%
 
-filter_data <- sapply(seq_len(length(gs)), function(x) {
+filter_data <- lapply(seq_len(length(gs)), function(x) {
   dat <- gh_pop_get_data(gs[[x]], gate_name)
   exprs(flow.set[[x]])[, ".ci"] %in% exprs(dat)[, ".ci"]
 }) %>%
