@@ -100,7 +100,7 @@ fname <- tim::save_plot(
 )
 
 plts <- tibble(filename = fname) %>%
-  mutate(.ri = 0)
+  mutate(.ri = 0L)
 
 df_plot <- tim::plot_file_to_df(plts$filename, filename = "Gating_step.png") %>% 
   bind_cols(plts %>% select(.ri)) %>%
