@@ -3,7 +3,7 @@
 "description": "Apply one of the OpenCyto automated gating methods to your data.",
 "tags": ["flow cytometry", "gating"],
 "authors": ["tercen"],
-"container": "tercen/automated_gating_operator:0.3.3",
+"container": "tercen/automated_gating_operator:0.3.5",
 "urls": ["https://github.com/tercen/automated_gating_operator"],
 "properties": [ 
   {
