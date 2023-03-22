@@ -13,7 +13,7 @@ ctx <- tercenCtx()
 
 # Parameters
 method <- ctx$op.value('gating_method', as.character, '2D - Ellipsoid gate')
-gate_name <- ctx$op.value('gate_name', as.character, 'Singlets')
+gate_name <- ctx$op.value('gate_name', as.character, 'Gate')
 stringency <- 1 - ctx$op.value('stringency', as.numeric, 0.05)
 plot.width <- ctx$op.value('plot.width', as.numeric, 750)
 plot.height <- ctx$op.value('plot.height', as.numeric, 750)
