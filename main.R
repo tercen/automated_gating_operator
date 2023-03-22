@@ -36,11 +36,13 @@ data <- data %>%
   mutate(.ci = 1:nrow(.) - 1L)
 
 files <- ctx$cselect() %>% 
-  select(contains(c("filename","Barcodes")))
+  select(contains(c("filename", "Barcodes")))
+
+if(ncol(files) == 0) files$filename <- "File"
 
 flow.frames <- data %>%
-  bind_cols(files)%>% 
-  group_by(across(contains(c("filename","Barcodes")))) %>% 
+  bind_cols(files) %>% 
+  group_by(across(contains(c("filename", "Barcodes")))) %>% 
   group_map(~tim::matrix_to_flowFrame(as.matrix(.x))) 
 
 names(flow.frames) <- levels(as.factor(files[[1]]))
