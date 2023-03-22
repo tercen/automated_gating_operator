@@ -17,6 +17,8 @@ gate_name <- ctx$op.value('gate_name', as.character, 'Gate')
 stringency <- 1 - ctx$op.value('stringency', as.numeric, 0.05)
 plot.width <- ctx$op.value('plot.width', as.numeric, 750)
 plot.height <- ctx$op.value('plot.height', as.numeric, 750)
+seed <- ctx$op.value('seed', as.numeric, 42)
+if(seed > 0) set.seed(seed)
 
 gating_method <- switch(
   method,

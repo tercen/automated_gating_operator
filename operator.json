@@ -42,6 +42,12 @@
     "name": "plot.height",
     "defaultValue": 750,
     "description": "Plot height (in pixels)."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "seed",
+    "defaultValue": -1,
+    "description": "Random seed."
   }
   ]
 }
