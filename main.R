@@ -22,7 +22,7 @@ if(seed > 0) set.seed(seed)
 
 gating_method <- switch(
   method,
-  "1D - Tail gate" = "quantile",
+  "1D - Tail gate" = "quantileGate",
   "1D - Largest peak" = "mindensity",
   "2D - Singlet gate" = "singletGate",
   "2D - Ellipsoid gate" = "flowClust.2d",
