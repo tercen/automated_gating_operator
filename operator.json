@@ -48,6 +48,12 @@
     "name": "seed",
     "defaultValue": -1,
     "description": "Random seed."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "x.axis.index",
+    "defaultValue": 1,
+    "description": "Index of the row used as the x axis. Default is 1 (first variable in the rows of the input projection will be the x axis of the biaxial plot)."
   }
   ]
 }

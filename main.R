@@ -20,6 +20,8 @@ plot.height <- ctx$op.value('plot.height', as.numeric, 750)
 seed <- ctx$op.value('seed', as.numeric, 42)
 if(seed > 0) set.seed(seed)
 
+x.axis.index <- ctx$op.value('x.axis.index', as.numeric, 1)
+
 gating_method <- switch(
   method,
   "1D - Tail gate" = "quantileGate",
@@ -67,11 +69,13 @@ gating_args <- switch(
 
 gs <- GatingSet(flow.set)
 
+cn_ordered <- channels[c(x.axis.index, seq_along(channels)[-x.axis.index])]
+
 gs_add_gating_method(
   gs,
   alias = gate_name,
   parent = "root",
-  dims = paste0(channels, collapse = ","),
+  dims = paste0(cn_ordered, collapse = ","),
   gating_method = gating_method,
   gating_args = gating_args
 )
