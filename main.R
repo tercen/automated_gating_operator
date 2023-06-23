@@ -64,7 +64,7 @@ gating_args <- switch(
   "1D - Largest peak" = paste0("max=", global_max * stringency),
   "2D - Singlet gate" = paste0("prediction_level=", stringency),
   "2D - Ellipsoid gate" = paste0("quantile=", stringency),
-  "2D - Quadrant gate" = paste0("quantile1=", stringency, "quantile3=", stringency)
+  "2D - Quadrant gate" = paste0("quantile1=", stringency, ", quantile3=", stringency)
 )
 
 gs <- GatingSet(flow.set)
