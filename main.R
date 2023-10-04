@@ -15,6 +15,7 @@ ctx <- tercenCtx()
 method <- ctx$op.value('gating_method', as.character, '2D - Ellipsoid gate')
 gate_name <- ctx$op.value('gate_name', as.character, 'Gate')
 stringency <- 1 - ctx$op.value('stringency', as.numeric, 0.05)
+K <- 4
 plot.width <- ctx$op.value('plot.width', as.numeric, 750)
 plot.height <- ctx$op.value('plot.height', as.numeric, 750)
 seed <- ctx$op.value('seed', as.numeric, 42)
@@ -26,24 +27,29 @@ gating_method <- switch(
   "1D - Largest peak" = "mindensity",
   "2D - Singlet gate" = "singletGate",
   "2D - Ellipsoid gate" = "flowClust.2d",
-  "2D - Quadrant gate" = "gate_quad_tmix"
+  "2D - Quadrant gate" = "quadGate.tmix"
 )
 
-data <- ctx$as.matrix() %>% t()
-channels <- ctx$rselect()[[1]]
+data <- ctx$select(c(".y", ".x", ".ci", ctx$labels[[1]])) %>%
+  rename(.ev_id = ctx$labels[[1]])
+
+channels <- c(ctx$yAxis[[1]], ctx$xAxis[[1]], ".ci", ".ev_id")
 colnames(data) <- channels
 
-data <- data %>% 
-  as_tibble() %>%
-  mutate(.ci = 1:nrow(.) - 1L)
+data <- data %>% as_tibble()
 
 files <- ctx$cselect() %>% 
-  select(contains(c("filename", "Barcodes")))
+  select(contains(c("filename", "Barcodes"))) %>%
+  mutate(.ci = 1:nrow(.) - 1L)
 
-if(ncol(files) == 0) files$filename <- "File"
+if(ncol(files) == 1) {
+  files <- files %>%
+    mutate(filename = "File") %>%
+    relocate(filename)
+}
 
 flow.frames <- data %>%
-  bind_cols(files) %>% 
+  left_join(files, by = ".ci") %>% 
   group_by(across(contains(c("filename", "Barcodes")))) %>% 
   group_map(~tim::matrix_to_flowFrame(as.matrix(.x))) 
 
@@ -62,22 +68,25 @@ gating_args <- switch(
   "1D - Largest peak" = paste0("max=", global_max * stringency),
   "2D - Singlet gate" = paste0("prediction_level=", stringency),
   "2D - Ellipsoid gate" = paste0("quantile=", stringency),
-  "2D - Quadrant gate" = paste0("quantile1=", stringency, "quantile3=", stringency)
+  "2D - Quadrant gate" = paste0("quantile1=", stringency, ", quantile3=", stringency, ", K=", 4, ", usePrior = 'no'")
 )
 
 gs <- GatingSet(flow.set)
 
+chans <- channels[!channels %in% c(".ci", ".ev_id")]
+
 gs_add_gating_method(
   gs,
   alias = gate_name,
+  pop = ifelse(method == "2D - Quadrant gate", "+/-+/-", "+"),
   parent = "root",
-  dims = paste0(channels, collapse = ","),
+  dims = paste0(chans, collapse = ","),
   gating_method = gating_method,
   gating_args = gating_args
 )
 
 ## plot gating results
-if(length(channels) == 1) {
+if(length(chans) == 1) {
   p <- ggcyto(gs, aes(x = !!sym(channels[1]))) +
     geom_density()
 } else {
@@ -85,8 +94,12 @@ if(length(channels) == 1) {
     geom_hex(bins = 100)
 }
 
+gates <- gh_pop_get_descendants(gs[[1]], "root")
+for(gate in gates) {
+  p <- p + geom_gate(gate)
+}
+
 p <- p +
-  geom_gate(gate_name) +
   geom_stats(fill = alpha(c("steelblue"), 0.2)) +
   theme_minimal() + 
   labs_cyto("marker") +
@@ -110,17 +123,26 @@ df_plot <- tim::plot_file_to_df(plts$filename, filename = "Gating_step.png") %>%
   bind_cols(plts %>% select(.ri)) %>%
   ctx$addNamespace() # %>%
 
-filter_data <- lapply(seq_len(length(gs)), function(x) {
-  dat <- gh_pop_get_data(gs[[x]], gate_name)
-  exprs(flow.set[[x]])[, ".ci"] %in% exprs(dat)[, ".ci"]
-}) %>%
-  unlist(use.names = FALSE)
+filter_data <- list()
+for(gate in gates) {
+  filter_data[[gate]] <- lapply(seq_len(length(gs)), function(x) {
+    dat <- gh_pop_get_data(gs[[x]], gate)
+    exprs(flow.set[[x]])[, ".ev_id"] %in% exprs(dat)[, ".ev_id"]
+  }) %>%
+    unlist(use.names = FALSE) %>%
+    as.numeric()
+}
 
-df_out1 <- tibble(
-  !!gate_name := ifelse(filter_data, 1, 0),
-  .ci = as.integer(data[[".ci"]])
-) %>%
+df_out1 <- as_tibble(filter_data) %>% 
+  mutate(.ev_id = as.integer(data[[".ev_id"]])) %>%
   ctx$addNamespace()
 
-ctx$save(list(df_out1, df_plot))
+df_out1 <- df_out1 %>%
+  as_relation() %>%
+  as_join_operator(ctx$labels, list(".ev_id"))
 
+df_out2 <-  df_plot %>%
+  as_relation() %>%
+  as_join_operator(list(), list())
+
+save_relation(list(df_out1, df_out2), ctx)
