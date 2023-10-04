@@ -1,24 +1,20 @@
-# OpenCyto one-step operator
+# Automated Gating
 
 ##### Description
 
-The `OpenCyto one-step operator` 
+The Automated Gating operator is based on the openCyto R package.
 
 ##### Usage
 
 Input projection|.
 ---|---
-`y-axis`        | numeric, measurement value 
-`row`           | factor, channel to be used for gating
-`column`        | factor, observation
+`y-axis`        | numeric, measurement value of the first channel
+`x-axis`        | numeric, optional, measurement value of the second channel 
+`column`        | factor, optional, sample / file identifier
 
-Input parameters|.
+Output data|.
 ---|---
-`input_var`        | parameter description
-
-Output relations|.
----|---
-`flag`        | pass / fail flag, per column
+`Gates`       | 0 / 1 flag per gate
 
 ##### Details
 
