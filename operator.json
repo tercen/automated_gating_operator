@@ -31,28 +31,28 @@
     {
       "kind": "DoubleProperty",
       "name": "stringency",
-      "defaultValue": "0.05",
+      "defaultValue": 0.05,
       "values": {},
       "description": "Stringency of the gate (0 = loose; 1 = stringent)."
     },
     {
       "kind": "DoubleProperty",
       "name": "plot.width",
-      "defaultValue": "750",
+      "defaultValue": 750,
       "values": {},
       "description": "Plot width (in pixels)."
     },
     {
       "kind": "DoubleProperty",
       "name": "plot.height",
-      "defaultValue": "750",
+      "defaultValue": 750,
       "values": {},
       "description": "Plot height (in pixels)."
     },
     {
       "kind": "DoubleProperty",
       "name": "seed",
-      "defaultValue": "-1",
+      "defaultValue": -1,
       "values": {},
       "description": "Random seed."
     }
