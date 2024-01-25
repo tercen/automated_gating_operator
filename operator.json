@@ -1,53 +1,60 @@
 {
-"name": "Automated gating",
-"description": "Apply one of the OpenCyto automated gating methods to your data.",
-"tags": ["flow cytometry", "gating"],
-"authors": ["tercen"],
-"container": "tercen/automated_gating_operator:latest",
-"urls": ["https://github.com/tercen/automated_gating_operator"],
-"properties": [ 
-  {
-    "kind": "EnumeratedProperty",
-    "name": "gating_method",
-    "defaultValue": "2D - Ellipsoid gate",
-    "values": [
-      "1D - Tail gate",
-      "1D - Largest peak",
-      "2D - Singlet gate",
-      "2D - Ellipsoid gate",
-      "2D - Quadrant gate"
-    ],
-    "description": "Name of the gating function."
-  },
-  {
-    "kind": "StringProperty",
-    "name": "gate_name",
-    "defaultValue": "Gate",
-    "description": "Name to give to the gate."
-  },
-  {
-    "kind": "DoubleProperty",
-    "name": "stringency",
-    "defaultValue": 0.05,
-    "description": "Stringency of the gate (0 = loose; 1 = stringent)."
-  },
-  {
-    "kind": "DoubleProperty",
-    "name": "plot.width",
-    "defaultValue": 750,
-    "description": "Plot width (in pixels)."
-  },
-  {
-    "kind": "DoubleProperty",
-    "name": "plot.height",
-    "defaultValue": 750,
-    "description": "Plot height (in pixels)."
-  },
-  {
-    "kind": "DoubleProperty",
-    "name": "seed",
-    "defaultValue": -1,
-    "description": "Random seed."
-  }
+  "name": "Automated gating",
+  "description": "Apply one of the OpenCyto automated gating methods to your data.",
+  "tags": [
+    "flow cytometry",
+    "gating",
+    "annotation"
+  ],
+  "authors": [
+    "tercen"
+  ],
+  "container": "tercen/automated_gating_operator:latest",
+  "urls": [
+    "https://github.com/tercen/automated_gating_operator"
+  ],
+  "properties": [
+    {
+      "kind": "EnumeratedProperty",
+      "name": "gating_method",
+      "defaultValue": "2D - Ellipsoid gate",
+      "values": ["1D - Tail gate", "1D - Largest peak", "2D - Singlet gate", "2D - Ellipsoid gate", "2D - Quadrant gate"],
+      "description": "Name of the gating function."
+    },
+    {
+      "kind": "StringProperty",
+      "name": "gate_name",
+      "defaultValue": "Gate",
+      "values": {},
+      "description": "Name to give to the gate."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "stringency",
+      "defaultValue": "0.05",
+      "values": {},
+      "description": "Stringency of the gate (0 = loose; 1 = stringent)."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "plot.width",
+      "defaultValue": "750",
+      "values": {},
+      "description": "Plot width (in pixels)."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "plot.height",
+      "defaultValue": "750",
+      "values": {},
+      "description": "Plot height (in pixels)."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "seed",
+      "defaultValue": "-1",
+      "values": {},
+      "description": "Random seed."
+    }
   ]
 }
