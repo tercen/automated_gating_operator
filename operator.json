@@ -1,6 +1,6 @@
 {
-  "name": "Automated gating",
-  "description": "Apply one of the OpenCyto automated gating methods to your data.",
+  "name": "Automated Gating",
+  "description": "Applies one of the OpenCyto automated gating methods to your data.",
   "tags": [
     "flow cytometry",
     "gating",
@@ -18,7 +18,13 @@
       "kind": "EnumeratedProperty",
       "name": "gating_method",
       "defaultValue": "2D - Ellipsoid gate",
-      "values": ["1D - Tail gate", "1D - Largest peak", "2D - Singlet gate", "2D - Ellipsoid gate", "2D - Quadrant gate"],
+      "values": [
+        "1D - Tail gate",
+        "1D - Largest peak",
+        "2D - Singlet gate",
+        "2D - Ellipsoid gate",
+        "2D - Quadrant gate"
+      ],
       "description": "Name of the gating function."
     },
     {
