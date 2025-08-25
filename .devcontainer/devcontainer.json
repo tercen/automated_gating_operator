@@ -1,0 +1,28 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
+{
+	"name": "Tercen Operator Runtime",
+  	"image": "tercen/runtime-flowsuite:3.15-4",
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "reditorsupport.r-syntax",
+                "reditorsupport.r",
+                "ms-toolsai.jupyter",
+                "ms-toolsai.jupyter-keymap",
+                "Github.copilot"
+            ]
+        }
+    },
+
+	// Set the default shell
+	// "postCreateCommand": "R -e 'renv::consent(provided = TRUE); renv::restore(confirm = FALSE)'"
+
+	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "devcontainer"
+}

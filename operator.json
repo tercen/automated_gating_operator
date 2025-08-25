@@ -9,7 +9,7 @@
   "authors": [
     "tercen"
   ],
-  "container": "tercen/automated_gating_operator:latest",
+  "container": "tercen/automated_gating_operator:1.0.4",
   "urls": [
     "https://github.com/tercen/automated_gating_operator"
   ],

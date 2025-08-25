@@ -33,12 +33,14 @@ gating_method <- switch(
 if(length(ctx$labels) == 0) stop("A lebel containing Event IDs should be specified.")
 
 if(ctx$hasNumericXAxis) {
-  data <- ctx$select(c(".y", ".x", ".ci", ctx$labels[[1]])) %>%
-    rename(.ev_id = ctx$labels[[1]])
+  data <- ctx$select(c(".y", ".x", ".ci", ctx$labels)) %>%
+    tidyr::unite(".ev_id", unlist(ctx$labels), sep = "_", remove = TRUE) %>%
+    mutate(.ev_id = as.numeric(as.factor(.ev_id)))
   channels <- c(ctx$yAxis[[1]], ctx$xAxis[[1]], ".ci", ".ev_id")
 } else {
-  data <- ctx$select(c(".y", ".ci", ctx$labels[[1]])) %>%
-    rename(.ev_id = ctx$labels[[1]])
+  data <- ctx$select(c(".y", ".ci", ctx$labels)) %>%
+    tidyr::unite(".ev_id", unlist(ctx$labels), sep = "_", remove = TRUE) %>%
+    mutate(.ev_id = as.numeric(as.factor(.ev_id)))
   channels <- c(ctx$yAxis[[1]], ".ci", ".ev_id")
 }
 
