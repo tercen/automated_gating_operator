@@ -34,15 +34,24 @@ if(length(ctx$labels) == 0) stop("A lebel containing Event IDs should be specifi
 
 if(ctx$hasNumericXAxis) {
   data <- ctx$select(c(".y", ".x", ".ci", ctx$labels)) %>%
-    tidyr::unite(".ev_id", unlist(ctx$labels), sep = "_", remove = TRUE) %>%
+    tidyr::unite(".ev_id", unlist(ctx$labels), sep = "_", remove = FALSE) %>%
     mutate(.ev_id = as.numeric(as.factor(.ev_id)))
   channels <- c(ctx$yAxis[[1]], ctx$xAxis[[1]], ".ci", ".ev_id")
 } else {
   data <- ctx$select(c(".y", ".ci", ctx$labels)) %>%
-    tidyr::unite(".ev_id", unlist(ctx$labels), sep = "_", remove = TRUE) %>%
+    tidyr::unite(".ev_id", unlist(ctx$labels), sep = "_", remove = FALSE) %>%
     mutate(.ev_id = as.numeric(as.factor(.ev_id)))
   channels <- c(ctx$yAxis[[1]], ".ci", ".ev_id")
 }
+
+# Store the mapping between .ev_id and original label columns for later use
+ev_id_mapping <- data %>%
+  select(.ev_id, unlist(ctx$labels)) %>%
+  distinct()
+
+# Now remove the original label columns to keep only the necessary columns for flow processing
+data <- data %>%
+  select(-unlist(ctx$labels))
 
 colnames(data) <- channels
 data <- data %>% as_tibble()
@@ -143,12 +152,18 @@ for(gate in gates) {
 }
 
 df_out1 <- as_tibble(filter_data) %>% 
+  rename_with(~ gsub("/", "_", .x)) %>%
   mutate(.ev_id = as.integer(data[[".ev_id"]])) %>%
+  left_join(ev_id_mapping, by = ".ev_id") %>%
+  select(-".ev_id") %>%
   ctx$addNamespace()
+
+# Get the namespaced column names that correspond to the original labels
+namespaced_labels <- names(df_out1)[names(df_out1) %in% paste0(ctx$namespace, ".", unlist(ctx$labels))]
 
 df_out1 <- df_out1 %>%
   as_relation() %>%
-  as_join_operator(ctx$labels, list(".ev_id"))
+  as_join_operator(ctx$labels, namespaced_labels)
 
 df_out2 <-  df_plot %>%
   as_relation() %>%
